@@ -5,7 +5,7 @@ import { HttpService } from '@nestjs/axios';
 import { ConfigService } from '@nestjs/config';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import { firstValueFrom } from 'rxjs';
-import { ApiEndPointsReference } from 'src/common/Api.enum';
+import { ApiEndPointsReference } from '../common/Api.enum';
 import { InjectRepository } from '@nestjs/typeorm';
 import { FindOptionsWhere, MongoRepository } from 'typeorm';
 import { Starship } from './entities/starship.entity';
