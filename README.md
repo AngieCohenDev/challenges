@@ -1,73 +1,153 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+# 🌌 didi-changes - API RESTful de Star Wars
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+**Proyecto desarrollado por Angie Lizeth Cohen Ramírez**  
+📧 angiedev2001@gmail.com
 
-## Description
+---
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## 📖 Descripción
 
-## Installation
+Este proyecto es una RESTful API implementada en **NestJS** que consume la información de la API pública de Star Wars ([SWAPI](https://swapi.dev/)) y sincroniza estos datos en una base de datos **MongoDB**. La API permite realizar consultas filtradas sobre cuatro entidades principales: **People**, **Films**, **Starships** y **Planets**.
 
-```bash
-$ npm install
+La aplicación sincroniza los datos de Star Wars cada cierto tiempo utilizando un cron job que descarga los datos y los guarda en MongoDB.
+
+---
+
+## 🔧 Requisitos
+
+Antes de ejecutar el proyecto, asegúrate de tener las siguientes variables de entorno configuradas en el archivo `.env`:
+
+```env
+API_HOST=https://swapi.dev/api
+DATABASE_URL=mongodb+srv://adminDB:1001893858..@cluster0.4tyw0uq.mongodb.net/didi-changedb
 ```
 
-## Running the app
+---
+
+## 🚀 Instalación y Ejecución
+
+1. **Clonar el repositorio**
+
+   ```bash
+   git clone https://github.com/usuario/didi-changes.git
+   cd didi-changes
+   ```
+
+2. **Instalar dependencias**
+
+   ```bash
+   npm install
+   ```
+
+3. **Configurar las variables de entorno**
+
+   Crea un archivo `.env` en la raíz del proyecto y añade las siguientes variables de entorno:
+
+   ```env
+   API_HOST=https://swapi.dev/api
+   DATABASE_URL=mongodb+srv://adminDB:1001893858..@cluster0.4tyw0uq.mongodb.net/didi-changedb
+   ```
+
+4. **Iniciar la aplicación**
+
+   ```bash
+   npm run start:dev
+   ```
+
+   La API estará disponible en `http://localhost:3000`, y la documentación interactiva de Swagger estará en `http://localhost:3000/api`.
+
+---
+
+## 🌐 Endpoints de la API
+
+La API expone los siguientes endpoints, que permiten obtener información de las entidades **People**, **Films**, **Starships** y **Planets**.
+
+### 🌠 People
+
+- **GET `/people`**: Listado de personas con filtros opcionales.
+  - **Filtros disponibles**:
+    - `name`: Filtrar por el nombre de la persona.
+
+### 🎬 Films
+
+- **GET `/films`**: Listado de películas con filtros opcionales.
+  - **Filtros disponibles**:
+    - `title`: Filtrar por título de la película.
+    - `director`: Filtrar por director de la película.
+    - `producer`: Filtrar por productor de la película.
+    - `release_date`: Filtrar por fecha de lanzamiento (formato YYYY-MM-DD).
+
+### 🚀 Starships
+
+- **GET `/starships`**: Listado de naves espaciales con filtros opcionales.
+  - **Filtros disponibles**:
+    - `name`: Filtrar por el nombre de la nave.
+    - `model`: Filtrar por modelo de la nave.
+    - `manufacturer`: Filtrar por fabricante.
+    - `starship_class`: Filtrar por clase de la nave.
+
+### 🌍 Planets
+
+- **GET `/planets`**: Listado de planetas con filtros opcionales.
+  - **Filtros disponibles**:
+    - `name`: Filtrar por nombre del planeta.
+    - `climate`: Filtrar por clima del planeta.
+    - `terrain`: Filtrar por terreno del planeta.
+    - `population`: Filtrar por población del planeta.
+
+---
+
+## 🧪 Tests Unitarios
+
+Se han implementado tests unitarios para cada entidad y controlador. Los tests se ejecutan usando **Jest**. A continuación se describen los tests implementados:
+
+### Tests de `PeopleController`
+
+- **GET `/people`**:
+  - **Test con filtro**: Verifica que se retorna un listado de personas filtrado por el parámetro `name`.
+  - **Test sin filtros**: Verifica que se retorna el listado completo de personas cuando no se proporcionan filtros.
+
+### Tests de `FilmsController`
+
+- **GET `/films`**:
+  - **Test con filtros**: Verifica que se retorna un listado de películas filtrado por `title`, `director`, `producer`, o `release_date`.
+  - **Test sin filtros**: Verifica que se retorna el listado completo de películas cuando no se proporcionan filtros.
+
+### Tests de `StarshipsController`
+
+- **GET `/starships`**:
+  - **Test con filtros**: Verifica que se retorna un listado de naves espaciales filtrado por `name`, `model`, `manufacturer`, o `starship_class`.
+  - **Test sin filtros**: Verifica que se retorna el listado completo de naves espaciales cuando no se proporcionan filtros.
+
+### Tests de `PlanetsController`
+
+- **GET `/planets`**:
+  - **Test con filtros**: Verifica que se retorna un listado de planetas filtrado por `name`, `climate`, `terrain`, o `population`.
+  - **Test sin filtros**: Verifica que se retorna el listado completo de planetas cuando no se proporcionan filtros.
+
+Para ejecutar los tests, utiliza el siguiente comando:
 
 ```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+npm run test
 ```
 
-## Test
+---
 
-```bash
-# unit tests
-$ npm run test
+## 📄 Documentación Swagger
 
-# e2e tests
-$ npm run test:e2e
+La documentación de la API está generada y accesible a través de **Swagger** en la ruta `/api`. Puedes acceder a la documentación interactiva y realizar pruebas directamente desde la interfaz Swagger:
 
-# test coverage
-$ npm run test:cov
-```
+- **URL**: `http://localhost:3000/api`
 
-## Support
+En la interfaz de Swagger, podrás ver todos los endpoints disponibles y probar las diferentes funcionalidades, incluyendo filtros y paginación.
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+---
 
-## Stay in touch
+## 📜 Licencia
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+Este proyecto está bajo una licencia **UNLICENSED**.
 
-## License
 
-Nest is [MIT licensed](LICENSE).
+**Proyecto desarrollado por Angie Lizeth Cohen Ramírez**  
+📧 angiedev2001@gmail.com
