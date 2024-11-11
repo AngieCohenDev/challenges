@@ -1,7 +1,7 @@
 import { Controller, Get, Query } from '@nestjs/common';
 import { StarshipsService } from './starships.service';
 import { ApiOperation, ApiQuery } from '@nestjs/swagger';
-import { Starship } from './entities/starship.entity';
+import { Starship } from './interface/starships.interface';
 
 @Controller('starships')
 export class StarshipsController {

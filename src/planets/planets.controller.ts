@@ -1,7 +1,7 @@
 import { Controller, Get, Query } from '@nestjs/common';
 import { PlanetsService } from './planets.service';
 import { ApiOperation, ApiQuery } from '@nestjs/swagger';
-import { Planet } from './entities/planet.entity';
+import { Planet } from './interface/planets.interface';
 
 @Controller('planets')
 export class PlanetsController {
