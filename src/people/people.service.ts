@@ -19,7 +19,9 @@ export class PeopleService {
     private readonly configService: ConfigService,
     @InjectRepository(Person)
     private readonly personRepository: Repository<Person>,
-  ) {}
+  ) {
+    this.getPeopleFromExternalApi()
+  }
 
   async create(createPeopleDto: People[]): Promise<People[]> {
     await this.personRepository.clear();
@@ -53,26 +55,35 @@ export class PeopleService {
     });
   }
 
-  @Cron(CronExpression.EVERY_10_SECONDS)
+  @Cron('0 0 */2 * *')
   async getPeopleFromExternalApi(): Promise<void> {
     const apiUrl = `${this.configService.get<string>('API_HOST')}/${
       ApiEndPointsReference.PEOPLE
     }`;
-    const response = await firstValueFrom(
-      this.httpService.get<PaginatedResponse>(apiUrl),
-    );
+  
+    let nextUrl = apiUrl;
+    const allPeople: any[] = [];
+  
+    try {
+      while (nextUrl) {
+        const response = await firstValueFrom(
+          this.httpService.get<PaginatedResponse>(nextUrl),
+        );
+  
+        const { results, next } = response.data;
+        allPeople.push(...results);
+        nextUrl = next; 
+      }
+  
+      await this.create(allPeople);
+      new Date().toLocaleString();
+  
 
-    const savedPeople = await this.create([...response.data.results]);
-    const currentDate = new Date().toLocaleString();
-    this.logger.log(`
-        ====================== 👤 People Update Report 👤 ======================
-        🟢 Status: SUCCESS
-        📅 Date & Time: ${currentDate}
-        👥 People Created: ${savedPeople.length}
-        
-        ====================================================================
-    `);
+    } catch (error) {
+      this.logger.error('Failed to fetch and save people data', error.message);
+    }
   }
+  
 
   async update(id: number, updatePersonDto: UpdatePersonDto): Promise<void> {
     await this.personRepository.update(id, updatePersonDto);

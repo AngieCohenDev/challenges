@@ -20,7 +20,9 @@ export class StarshipsService {
     private readonly configService: ConfigService,
     @InjectRepository(Starship)
     private readonly starshipRepository: MongoRepository<Starship>,
-  ) {}
+  ) {
+    this.getStarshipsFromExternalApi()
+  }
 
   async create(createStarshipDto: CreateStarshipDto): Promise<Starship> {
     const newStarship = this.starshipRepository.create(createStarshipDto);
@@ -74,7 +76,7 @@ export class StarshipsService {
     this.logger.log(`Starship with ID ${id} removed successfully.`);
   }
 
-  @Cron(CronExpression.EVERY_5_SECONDS)
+  @Cron('0 0 */2 * *')
   async getStarshipsFromExternalApi(): Promise<void> {
     const apiUrl = `${this.configService.get<string>('API_HOST')}/${
       ApiEndPointsReference.STARSHIPS

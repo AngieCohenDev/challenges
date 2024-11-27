@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Film } from '../interface/films.interface';
+import { FilmI } from '../interface/films.interface';
 
-export class CreateFilmDto implements Film {
+export class CreateFilmDto implements FilmI {
   @ApiProperty({ description: 'Title of the film' })
   title: string;
 

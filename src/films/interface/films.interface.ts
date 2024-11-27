@@ -1,6 +1,6 @@
 import { ObjectId } from 'typeorm';
 
-export interface Film {
+export interface FilmI {
   _id?: ObjectId;
   title: string;
   episode_id: number;
@@ -19,8 +19,10 @@ export interface Film {
 }
 
 export interface FilmsApiResponse {
-  count: number;
-  next: string | null;
-  previous: string | null;
-  results: Film[];
+  total : number;
+  page : number;
+  limit: number;
+  results : FilmI[];
 }
+
+

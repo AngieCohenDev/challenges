@@ -9,7 +9,8 @@ import { HttpService } from '@nestjs/axios';
 import { ApiEndPointsReference } from '../common/Api.enum';
 import { ConfigService } from '@nestjs/config';
 import { Film } from './entities/film.entity';
-import { FilmsApiResponse } from './interface/films.interface';
+import { FilmI, FilmsApiResponse } from './interface/films.interface';
+import { log } from 'console';
 
 @Injectable()
 export class FilmsService {
@@ -20,7 +21,9 @@ export class FilmsService {
     private readonly configService: ConfigService,
     @InjectRepository(Film)
     private readonly filmRepository: Repository<Film>,
-  ) {}
+  ) {
+    this.getFilmsFromExternalApi();
+  }
 
   async create(createFilmDto: CreateFilmDto[]): Promise<Film[]> {
     await this.filmRepository.clear();
@@ -37,7 +40,12 @@ export class FilmsService {
     `);
     return savedFilm;
   }
-  async findAll(filters?: Partial<Film>): Promise<Film[]> {
+
+  async findAll(
+    page : number = 1, 
+    limit : number = 10, 
+    {...filters }: Partial<FilmI>
+  ): Promise<FilmsApiResponse> {
     const conditions: FindOptionsWhere<Film> = {};
 
     if (filters) {
@@ -45,35 +53,35 @@ export class FilmsService {
         conditions.title = { $regex: new RegExp(filters.title, 'i') } as any; // Búsqueda parcial sin distinción de mayúsculas
       }
       if (filters.director) {
-        conditions.director = {
-          $regex: new RegExp(filters.director, 'i'),
-        } as any;
+        conditions.director = { $regex: new RegExp(filters.director, 'i') } as any;
       }
     }
 
-    return await this.filmRepository.find({
+    const [results, total] = await this.filmRepository.findAndCount({
       where: conditions,
+      take: limit, // Límite de elementos por página
+      skip: (page - 1) * limit, // Desplazamiento para obtener los resultados de la página actual
     });
+
+    return {
+      total,
+      page,
+      limit,
+      results,
+    };
   }
 
-  @Cron(CronExpression.EVERY_10_SECONDS)
+
+  @Cron('0 0 */2 * *')
   async getFilmsFromExternalApi(): Promise<FilmsApiResponse> {
     const response = await firstValueFrom(
       this.httpService.get<FilmsApiResponse>(
-        `${this.configService.get<string>('API_HOST')}/${
-          ApiEndPointsReference.FILMS
+        `${this.configService.get<string>('API_HOST')}/${ApiEndPointsReference.FILMS
         }`,
       ),
     );
+
     await this.create(response.data.results);
     return response.data;
-  }
-
-  update(id: number, updateFilmDto: UpdateFilmDto) {
-    return `This action updates a #${id} film`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} film`;
   }
 }

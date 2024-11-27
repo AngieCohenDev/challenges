@@ -11,11 +11,10 @@ export class PeopleController {
   @Get()
   @ApiOperation({ summary: 'Get all people with optional filters' })
   @ApiQuery({ name: 'name', required: false, description: 'Filter by name' })
-  findAll(@Query('name') name?: string): Promise<People[]> {
-    const filters: Partial<People> = {};
-    if (name) {
-      filters.name = name;
-    }
-    return this.peopleService.findAll(filters);
+  findAll(
+    @Query('name') name?: string
+    
+  ): Promise<People[]> {
+    return this.peopleService.findAll({name});
   }
 }

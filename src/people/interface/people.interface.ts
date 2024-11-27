@@ -22,3 +22,10 @@ export interface PaginatedResponse {
   previous: string | null;
   results: People[];
 }
+
+export interface PeopleApiResponse {
+  total : number;
+  page : number;
+  limit: number;
+  results: People[];
+}

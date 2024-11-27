@@ -1,11 +1,12 @@
 import { Controller, Get, Query } from '@nestjs/common';
 import { FilmsService } from './films.service';
 import { ApiOperation, ApiQuery } from '@nestjs/swagger';
-import { Film } from './interface/films.interface';
+import { FilmsApiResponse } from './interface/films.interface';
+import { ObjectId } from 'mongodb';
 
 @Controller('films')
 export class FilmsController {
-  constructor(private readonly filmsService: FilmsService) {}
+  constructor(private readonly filmsService: FilmsService) { }
 
   @Get()
   @ApiOperation({ summary: 'Get all films with optional filters' })
@@ -30,8 +31,10 @@ export class FilmsController {
     @Query('director') director?: string,
     @Query('producer') producer?: string,
     @Query('release_date') release_date?: string,
-  ): Promise<Film[]> {
-    const filters = { title, director, producer, release_date };
-    return await this.filmsService.findAll(filters);
+    @Query('_id') _id?: ObjectId,
+    @Query('page') page?: number,
+    @Query('limit') limit?: number,
+  ): Promise<FilmsApiResponse> {
+    return await this.filmsService.findAll(page, limit, { title, director, producer, release_date, _id });
   }
 }

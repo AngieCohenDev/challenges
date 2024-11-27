@@ -20,7 +20,9 @@ export class PlanetsService {
     private readonly configService: ConfigService,
     @InjectRepository(Planet)
     private readonly planetRepository: MongoRepository<Planet>,
-  ) {}
+  ) {
+    this.getPlanetsFromExternalApi()
+  }
 
   async create(createPlanetDto: CreatePlanetDto): Promise<Planet> {
     const newPlanet = this.planetRepository.create(createPlanetDto);
@@ -69,7 +71,7 @@ export class PlanetsService {
     this.logger.log(`Planet with ID ${id} removed successfully.`);
   }
 
-  @Cron(CronExpression.EVERY_10_SECONDS)
+  @Cron('0 0 */2 * *')
   async getPlanetsFromExternalApi(): Promise<void> {
     const apiUrl = `${this.configService.get<string>('API_HOST')}/${
       ApiEndPointsReference.PLANETS
