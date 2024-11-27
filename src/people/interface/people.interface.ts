@@ -1,4 +1,6 @@
+import { ObjectId } from 'typeorm';
 export interface People {
+  _id?: ObjectId;
   name: string;
   height: string;
   mass: string;

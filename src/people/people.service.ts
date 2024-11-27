@@ -2,7 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { FindOptionsWhere, Repository } from 'typeorm';
 import { UpdatePersonDto } from './dto/update-person.dto';
-import { Cron, CronExpression } from '@nestjs/schedule';
+import { Cron} from '@nestjs/schedule';
 import { firstValueFrom } from 'rxjs';
 import { HttpService } from '@nestjs/axios';
 import { ApiEndPointsReference } from '../common/Api.enum';
@@ -39,7 +39,7 @@ export class PeopleService {
     return savedPeople;
   }
 
-  async findAll(filters?: Partial<People>): Promise<People[]> {
+  async findAll({...filters }: Partial<People>): Promise<People[]> {
     const conditions: FindOptionsWhere<People> = {};
 
     if (filters) {
@@ -49,7 +49,7 @@ export class PeopleService {
         } as any as string;
       }
     }
-
+    
     return await this.personRepository.find({
       where: conditions,
     });

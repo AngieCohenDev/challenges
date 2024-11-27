@@ -77,12 +77,20 @@ export class PlanetsService {
       ApiEndPointsReference.PLANETS
     }`;
 
-    try {
-      const response = await firstValueFrom(
-        this.httpService.get<PaginatedResponse>(apiUrl),
-      );
+    let nextUrl = apiUrl;
+    const allPlanets: any[] = [];
 
-      const savedPlanets = await this.savePlanets(response.data.results);
+    try {
+      while (nextUrl) {
+      const response = await firstValueFrom(
+        this.httpService.get<PaginatedResponse>(nextUrl),
+      );
+    
+      const { results, next } = response.data;
+      allPlanets.push(...results);
+      nextUrl = next; }
+
+      const savedPlanets = await this.savePlanets(allPlanets);
       const currentDate = new Date().toLocaleString();
       this.logger.log(`
           ====================== 🌍 Planet Update Report 🌍 ======================
