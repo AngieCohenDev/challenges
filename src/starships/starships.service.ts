@@ -82,12 +82,20 @@ export class StarshipsService {
       ApiEndPointsReference.STARSHIPS
     }`;
 
-    try {
-      const response = await firstValueFrom(
-        this.httpService.get<PaginatedResponse>(apiUrl),
-      );
+    let nextUrl = apiUrl;
+    const allStarhips: any[] = [];
 
-      const savedStarships = await this.saveStarships(response.data.results);
+    try {
+      while (nextUrl) {
+      const response = await firstValueFrom(
+        this.httpService.get<PaginatedResponse>(nextUrl),
+      );
+      const { results, next } = response.data;
+      allStarhips.push(...results);
+        nextUrl = next; 
+    }
+
+      const savedStarships = await this.saveStarships(allStarhips);
       const currentDate = new Date().toLocaleString();
       this.logger.log(`
           ====================== 🚀 Starship Update Report 🚀 ======================

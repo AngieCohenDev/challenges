@@ -1,8 +1,9 @@
 import { Controller, Get, Query } from '@nestjs/common';
 import { FilmsService } from './films.service';
 import { ApiOperation, ApiQuery } from '@nestjs/swagger';
-import { FilmsApiResponse } from './interface/films.interface';
+import { FilmI, FilmsApiResponse } from './interface/films.interface';
 import { ObjectId } from 'mongodb';
+import { PaginatedResponse } from 'src/people/interface/people.interface';
 
 @Controller('films')
 export class FilmsController {
@@ -31,10 +32,8 @@ export class FilmsController {
     @Query('director') director?: string,
     @Query('producer') producer?: string,
     @Query('release_date') release_date?: string,
-    @Query('_id') _id?: ObjectId,
-    @Query('page') page?: number,
-    @Query('limit') limit?: number,
-  ): Promise<FilmsApiResponse> {
-    return await this.filmsService.findAll(page, limit, { title, director, producer, release_date, _id });
+  ): Promise<FilmI[]> {
+    const filters = { title, director, producer, release_date };
+    return await this.filmsService.findAll(filters);
   }
 }

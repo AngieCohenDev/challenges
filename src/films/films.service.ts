@@ -41,11 +41,7 @@ export class FilmsService {
     return savedFilm;
   }
 
-  async findAll(
-    page : number = 1, 
-    limit : number = 10, 
-    {...filters }: Partial<FilmI>
-  ): Promise<FilmsApiResponse> {
+  async findAll(filters?: Partial<Film>): Promise<Film[]> {
     const conditions: FindOptionsWhere<Film> = {};
 
     if (filters) {
@@ -53,22 +49,15 @@ export class FilmsService {
         conditions.title = { $regex: new RegExp(filters.title, 'i') } as any; // Búsqueda parcial sin distinción de mayúsculas
       }
       if (filters.director) {
-        conditions.director = { $regex: new RegExp(filters.director, 'i') } as any;
+        conditions.director = {
+          $regex: new RegExp(filters.director, 'i'),
+        } as any;
       }
     }
 
-    const [results, total] = await this.filmRepository.findAndCount({
+    return await this.filmRepository.find({
       where: conditions,
-      take: limit, // Límite de elementos por página
-      skip: (page - 1) * limit, // Desplazamiento para obtener los resultados de la página actual
     });
-
-    return {
-      total,
-      page,
-      limit,
-      results,
-    };
   }
 
 
