@@ -58,7 +58,7 @@ export class PeopleService {
   @Cron('0 0 */2 * *')
   async getPeopleFromExternalApi(): Promise<void> {
     const apiUrl = `${this.configService.get<string>('API_HOST')}/${
-      ApiEndPointsReference.PEOPLE
+      ApiEndPointsReference.PEOPLE 
     }`;
   
     let nextUrl = apiUrl;
