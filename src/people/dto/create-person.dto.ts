@@ -18,4 +18,5 @@ export class CreatePeopleDto implements People {
   created: string;
   edited: string;
   url: string;
+  
 }

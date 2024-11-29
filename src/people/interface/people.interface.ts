@@ -25,9 +25,9 @@ export interface PaginatedResponse {
   results: People[];
 }
 
-export interface PeopleApiResponse {
-  total : number;
-  page : number;
+export interface PaginatedResult<T> {
+  data: T[];
+  total: number;
+  page: number;
   limit: number;
-  results: People[];
 }
